@@ -1,5 +1,6 @@
 package com.example.elvedin.sporedimk.ui.manager.network_manager;
 
+import com.example.elvedin.sporedimk.Filter;
 import com.example.elvedin.sporedimk.MainApplication;
 import com.example.elvedin.sporedimk.utils.Constants;
 import com.example.elvedin.sporedimk.utils.Utils;
@@ -25,7 +26,7 @@ public class Client {
         //Keeping the builder with the latest data from the http client
         if (retrofit == null || forceInit) {
 
-            OkHttpClient.Builder okHttpBuilder = MainApplication.isTest ? Utils.getUnsafeOkHttpClient() : new OkHttpClient.Builder();
+            OkHttpClient.Builder okHttpBuilder = Filter.test ? Utils.getUnsafeOkHttpClient() : new OkHttpClient.Builder();
 
             OkHttpClient okHttpClient = okHttpBuilder.addInterceptor(new Interceptor() {
                 @Override

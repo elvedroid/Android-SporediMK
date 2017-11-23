@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:orientation="vertical"
     android:weightSum="5"
-    android:padding="@dimen/horizontal_margin_half"
+    android:padding="@dimen/product_price_padding_bottom"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <ImageView
