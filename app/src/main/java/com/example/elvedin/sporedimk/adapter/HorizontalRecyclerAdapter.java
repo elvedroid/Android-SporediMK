@@ -20,7 +20,7 @@ import java.util.List;
 
 public class HorizontalRecyclerAdapter extends RecyclerView.Adapter<HorizontalRecyclerAdapter.ViewHolder> {
     public interface OnItemClickInterface {
-        void onOItemClicked(View view, int adapterPosition);
+        void onItemClicked(View view, int adapterPosition);
     }
 
     private Context context;
@@ -54,7 +54,7 @@ public class HorizontalRecyclerAdapter extends RecyclerView.Adapter<HorizontalRe
             @Override
             public void onClick(View view) {
                 if (listener != null) {
-                    listener.onOItemClicked(view, holder.getAdapterPosition());
+                    listener.onItemClicked(view, holder.getAdapterPosition());
                 }
             }
         });

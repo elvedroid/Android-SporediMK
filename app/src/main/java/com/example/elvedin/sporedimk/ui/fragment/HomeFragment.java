@@ -1,21 +1,16 @@
 package com.example.elvedin.sporedimk.ui.fragment;
 
-import android.provider.Settings;
-import android.support.v4.app.Fragment;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
+import android.util.Log;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.elvedin.sporedimk.AppSingleton;
 import com.example.elvedin.sporedimk.R;
-import com.example.elvedin.sporedimk.adapter.CategoryAdapter;
 import com.example.elvedin.sporedimk.adapter.HorizontalRecyclerAdapter;
 import com.example.elvedin.sporedimk.adapter.OfferAdapter;
-import com.example.elvedin.sporedimk.model.CatLang;
 import com.example.elvedin.sporedimk.model.Category;
 import com.example.elvedin.sporedimk.model.Offer;
 import com.example.elvedin.sporedimk.ui.manager.AppHolder;
@@ -25,26 +20,21 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-/**
- * Created by elvedin on 11/1/17.
- */
-
 public class HomeFragment extends BaseFragment implements HorizontalRecyclerAdapter.OnItemClickInterface, OfferAdapter.OfferItemInterface {
 
+    private static final String TAG = "HomeFragment";
     RecyclerView recyclerView, mfoRecyclerView;
     RecyclerView.LayoutManager layoutManager, mGridLayoutManager;
     HorizontalRecyclerAdapter adapter;
     List<HorizontalAdapterItem> items;
     OfferAdapter mfoAdapter;
     List<Offer> mfoList;
-    private AdView mAdView;
 
     @Override
     protected int getLayoutResId() {
@@ -58,9 +48,9 @@ public class HomeFragment extends BaseFragment implements HorizontalRecyclerAdap
 
     @Override
     protected void initViews(View contentView) {
-        mAdView = contentView.findViewById(R.id.adView);
+        AdView mAdView = contentView.findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().addTestDevice("D4528B3D9CDE7BDEC56DFB086AAD06C4").build();
-//        mAdView.loadAd(adRequest);
+        mAdView.loadAd(adRequest);
 
         items = new ArrayList<>();
         recyclerView = contentView.findViewById(R.id.rv_suggested_categories);
@@ -96,7 +86,7 @@ public class HomeFragment extends BaseFragment implements HorizontalRecyclerAdap
     }
 
     @Override
-    public void onOItemClicked(View view, int adapterPosition) {
+    public void onItemClicked(View view, int adapterPosition) {
         HorizontalAdapterItem item = items.get(adapterPosition);
         UiHelper.replaceFragment(getActivity().getSupportFragmentManager(),
                 R.id.containerLayoutMain,
@@ -108,7 +98,7 @@ public class HomeFragment extends BaseFragment implements HorizontalRecyclerAdap
         Call<List<Offer>> call = AppHolder.getInstance().getClientInterface().getMostFavoriteProducts();
         call.enqueue(new Callback<List<Offer>>() {
             @Override
-            public void onResponse(Call<List<Offer>> call, Response<List<Offer>> response) {
+            public void onResponse(@NonNull Call<List<Offer>> call, @NonNull Response<List<Offer>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     mfoList.clear();
                     mfoList.addAll(response.body());
@@ -117,8 +107,9 @@ public class HomeFragment extends BaseFragment implements HorizontalRecyclerAdap
             }
 
             @Override
-            public void onFailure(Call<List<Offer>> call, Throwable t) {
+            public void onFailure(@NonNull Call<List<Offer>> call, @NonNull Throwable t) {
                 Toast.makeText(getActivity().getApplicationContext(), t.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.e(TAG, "getMostFavoriteProducts", t);
             }
         });
     }

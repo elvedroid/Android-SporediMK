@@ -5,6 +5,7 @@ package com.example.elvedin.sporedimk.ui.activity;
  */
 
 import android.Manifest;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
@@ -23,7 +24,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.example.elvedin.sporedimk.Filter;
 import com.example.elvedin.sporedimk.R;
+import com.example.elvedin.sporedimk.utils.ContextWrapper;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -206,4 +209,8 @@ public class BaseActivity extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(ContextWrapper.wrap(newBase, Filter.language));
+    }
 }

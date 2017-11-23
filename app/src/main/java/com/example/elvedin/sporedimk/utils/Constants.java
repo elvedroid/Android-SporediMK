@@ -45,6 +45,9 @@ public class Constants {
     public static final String CONTENT_TYPE_HEADER = "Content-type";
     public static final String MSISDN_HEADER = "msisdn-added";
 
+    public static final String LANGUAGE_EN = "en";
+    public static final String LANGUAGE_MK = "mk";
+
     //server links
     public static final String LOGIN = PRIVATE + "login";
     public static final String USER_LOGIN = PRIVATE + "user-login";

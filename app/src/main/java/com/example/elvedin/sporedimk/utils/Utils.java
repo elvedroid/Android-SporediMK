@@ -1,6 +1,9 @@
 package com.example.elvedin.sporedimk.utils;
 
+import android.util.Log;
+
 import com.example.elvedin.sporedimk.AppSingleton;
+import com.example.elvedin.sporedimk.Filter;
 import com.example.elvedin.sporedimk.model.Category;
 
 import java.security.cert.CertificateException;
@@ -15,10 +18,6 @@ import javax.net.ssl.X509TrustManager;
 
 import okhttp3.OkHttpClient;
 
-/**
- * Created by elvedin on 10/26/17.
- */
-
 public class Utils {
     public static OkHttpClient.Builder getUnsafeOkHttpClient() {
         try {
@@ -27,10 +26,12 @@ public class Utils {
                     new X509TrustManager() {
                         @Override
                         public void checkClientTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
+                            Log.i("TrustManager", "Test");
                         }
 
                         @Override
                         public void checkServerTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
+                            Log.i("TrustManager", "Test");
                         }
 
                         @Override
@@ -51,7 +52,7 @@ public class Utils {
             builder.hostnameVerifier(new HostnameVerifier() {
                 @Override
                 public boolean verify(String hostname, SSLSession session) {
-                    return true;
+                    return Filter.test;
                 }
             });
 
@@ -61,7 +62,7 @@ public class Utils {
         }
     }
 
-    public static boolean categoriesContainsCategory(Category category){
+    public static boolean categoriesContainsCategory(Category category) {
         List<Category> categories = AppSingleton.getInstance().getCategories();
         for (Category category1 : categories) {
             if (category1.getName().equals(category.getName())) {

@@ -8,24 +8,15 @@ import com.example.elvedin.sporedimk.model.Product;
 import com.example.elvedin.sporedimk.model.ProductOffers;
 import com.example.elvedin.sporedimk.utils.Constants;
 
-import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
-import retrofit2.http.Part;
 import retrofit2.http.Path;
 
-/**
- * Created by elvedin on 10/26/17.
- */
-
 public interface ClientInterface {
-    @GET(Constants.GET_ALL_CATEGORIES)
-    Call<List<Category>> getCategories();
-
     @GET(Constants.GET_ROOT_CATEGORIES + "/{lang}")
     Call<List<Category>> getRootCategories(@Path("lang") String lang);
 

@@ -3,6 +3,7 @@ package com.example.elvedin.sporedimk;
 import android.content.Context;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
+import android.util.Log;
 import android.webkit.WebView;
 
 import com.example.elvedin.sporedimk.managers.persistence.Persistence;
@@ -27,17 +28,10 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
-/**
- * Created by elvedin on 10/26/17.
- */
-
 public class MainApplication extends MultiDexApplication {
     private static MainApplication mainApplication;
-    public static final String LOG_TAG = "mWallet";
-    public static final boolean isTest = true;
 
-
-    public static MainApplication getInstance(){
+    public static MainApplication getInstance() {
         return mainApplication;
     }
 
@@ -47,16 +41,8 @@ public class MainApplication extends MultiDexApplication {
         super.onCreate();
         mainApplication = this;
         new WebView(this).destroy();
-//        new FontsOverride(this).loadFonts();
 
-//        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-//                .setDefaultFontPath("font/telefonts.ttf")
-//                .setFontAttrId(R.attr.fontPath)
-//                .build()
-//        );
-
-
-        if (isTest)
+        if (Filter.test)
             initTrustManagerForAllHTTPSServers();
 
         AppHolder.getInstance().setContext(getApplicationContext());
@@ -80,11 +66,11 @@ public class MainApplication extends MultiDexApplication {
             ctx.init(null, new TrustManager[]{
                     new X509TrustManager() {
                         public void checkClientTrusted(X509Certificate[] chain, String authType) {
-
+                            Log.i("MainApplication", "TrustManager-Test");
                         }
 
                         public void checkServerTrusted(X509Certificate[] chain, String authType) {
-
+                            Log.i("MainApplication", "TrustManager-Test");
                         }
 
                         public X509Certificate[] getAcceptedIssuers() {
@@ -103,7 +89,7 @@ public class MainApplication extends MultiDexApplication {
 
     @Override
     protected void attachBaseContext(Context base) {
-        String lang = "en";
+        String lang = "mk";
         AppHolder.getInstance().setLanguage(lang);
         super.attachBaseContext(LocaleHelper.onAttach(base, lang));
         MultiDex.install(this);

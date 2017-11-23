@@ -1,21 +1,19 @@
 package com.example.elvedin.sporedimk.ui.fragment;
 
-
-import android.content.res.Resources;
-import android.graphics.Rect;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.TypedValue;
-import android.view.LayoutInflater;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.example.elvedin.sporedimk.AppSingleton;
+import com.example.elvedin.sporedimk.Filter;
 import com.example.elvedin.sporedimk.R;
 import com.example.elvedin.sporedimk.adapter.CategoryAdapter;
 import com.example.elvedin.sporedimk.managers.persistence.Persistence;
@@ -26,9 +24,7 @@ import com.example.elvedin.sporedimk.utils.UiHelper;
 import com.example.elvedin.sporedimk.utils.Utils;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -64,7 +60,7 @@ public class CategoryFragment extends BaseFragment implements CategoryAdapter.Ca
 
     @Override
     public String getTitle() {
-        return "Category";
+        return getString(R.string.title_categories);
     }
 
     @Override
@@ -73,18 +69,48 @@ public class CategoryFragment extends BaseFragment implements CategoryAdapter.Ca
         if (getArguments() != null) {
             fromCategory = getArguments().getString(FROM_CATEGORY);
         }
+        if (AppSingleton.getInstance().getCategories() != null && AppSingleton.getInstance().getCategories().size() > 0) {
+            getRootOrSubCategories(fromCategory);
+        } else {
+            getCategories();
+        }
+    }
+
+    private void getRootOrSubCategories(String fromCategory) {
         if (ROOT_CATEGORIES.equals(fromCategory)) {
-            getRootCategories(fromCategory);
+            getRootCategories();
         } else {
             getSubcategories(fromCategory);
         }
     }
 
-    private void getRootCategories(String fromCategory) {
-        Call<List<Category>> call = AppHolder.getInstance().getClientInterface().getRootCategories("en");
+    private void getCategories() {
+        Call<List<Category>> call = AppHolder.getInstance().getClientInterface().getLeafCategories(Filter.language);
         call.enqueue(new Callback<List<Category>>() {
             @Override
-            public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
+            public void onResponse(@NonNull Call<List<Category>> call, @NonNull Response<List<Category>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    AppSingleton.getInstance().setCategories(response.body());
+                    getRootOrSubCategories(fromCategory);
+                } else {
+                    Toast.makeText(getContext(), getString(R.string.connection_error), Toast.LENGTH_SHORT).show();
+                    Log.e(TAG, "getLeafCategories - responce.body = null");
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<List<Category>> call, @NonNull Throwable throwable) {
+                Toast.makeText(getContext(), throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.e(TAG, "getLeafCategories", throwable);
+            }
+        });
+    }
+
+    private void getRootCategories() {
+        Call<List<Category>> call = AppHolder.getInstance().getClientInterface().getRootCategories(Filter.language);
+        call.enqueue(new Callback<List<Category>>() {
+            @Override
+            public void onResponse(@NonNull Call<List<Category>> call, @NonNull Response<List<Category>> response) {
                 if (response.isSuccessful()) {
                     subCategoriesList = response.body();
                 }
@@ -92,8 +118,9 @@ public class CategoryFragment extends BaseFragment implements CategoryAdapter.Ca
             }
 
             @Override
-            public void onFailure(Call<List<Category>> call, Throwable t) {
+            public void onFailure(@NonNull Call<List<Category>> call, @NonNull Throwable t) {
                 Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.e(TAG, "getRootCategories", t);
             }
         });
     }
@@ -124,10 +151,10 @@ public class CategoryFragment extends BaseFragment implements CategoryAdapter.Ca
     }
 
     private void getSubcategories(String cat) {
-        Call<List<Category>> call = AppHolder.getInstance().getClientInterface().getCategoriesFromCategory(new CatLang(cat, "en"));
+        Call<List<Category>> call = AppHolder.getInstance().getClientInterface().getCategoriesFromCategory(new CatLang(cat, Filter.language));
         call.enqueue(new Callback<List<Category>>() {
             @Override
-            public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
+            public void onResponse(@NonNull Call<List<Category>> call, @NonNull Response<List<Category>> response) {
                 if (response.isSuccessful()) {
                     subCategoriesList = response.body();
                 }
@@ -135,8 +162,9 @@ public class CategoryFragment extends BaseFragment implements CategoryAdapter.Ca
             }
 
             @Override
-            public void onFailure(Call<List<Category>> call, Throwable t) {
+            public void onFailure(@NonNull Call<List<Category>> call, @NonNull Throwable t) {
                 Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.e(TAG, "getCategoriesFromCategory", t);
             }
         });
     }

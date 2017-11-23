@@ -18,5 +18,12 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="most_favorite_offers">Most Favorite Products</string>
     <string name="suggested_categories">Suggested Categories</string>
+    <string name="banner_ad_unit_id_test">ca-app-pub-3940256099942544/5224354917</string>
     <string name="banner_ad_unit_id">ca-app-pub-4378596080583321/6565385578</string>
+    <string name="version">Version\n%s</string>
+    <string name="language">Language</string>
+    <string name="rate_the_app">Rate the app</string>
+    <string name="lang_en">English</string>
+    <string name="lang_mk">Македонски</string>
+    <string name="connection_error">Connection Error</string>
 </resources>
