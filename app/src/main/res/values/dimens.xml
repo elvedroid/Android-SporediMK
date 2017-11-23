@@ -12,7 +12,8 @@
     <dimen name="list_item_height">100dp</dimen>
 
     <dimen name="card_margin">5dp</dimen>
-    <dimen name="card_category_cover_height">140dp</dimen>
+    <dimen name="card_category_cover_height">100dp</dimen>
+    <dimen name="card_category_cover_height_half">50dp</dimen>
     <dimen name="card_category_title_padding">8dp</dimen>
     <dimen name="product_price_padding_bottom">4dp</dimen>
     <dimen name="product_price">15sp</dimen>

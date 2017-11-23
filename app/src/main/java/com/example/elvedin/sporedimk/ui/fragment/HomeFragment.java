@@ -60,7 +60,7 @@ public class HomeFragment extends BaseFragment implements HorizontalRecyclerAdap
     protected void initViews(View contentView) {
         mAdView = contentView.findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().addTestDevice("D4528B3D9CDE7BDEC56DFB086AAD06C4").build();
-        mAdView.loadAd(adRequest);
+//        mAdView.loadAd(adRequest);
 
         items = new ArrayList<>();
         recyclerView = contentView.findViewById(R.id.rv_suggested_categories);
