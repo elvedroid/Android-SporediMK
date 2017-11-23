@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">SporediMK</string>
+    <string name="title_home">Home</string>
+    <string name="title_categories">Categories</string>
+    <string name="title_favorites">Favorites</string>
+    <string name="title_more">More</string>
+
+    <string name="searchable_hint">Search products</string>
+
+    <string name="cards">Cards</string>
+    <string name="list">List</string>
+
+    <string name="product_description">Product Description</string>
+    <string name="available_in">Available in:</string>
+
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="most_favorite_offers">Most Favorite Products</string>
+    <string name="suggested_categories">Suggested Categories</string>
+    <string name="banner_ad_unit_id">ca-app-pub-4378596080583321/6565385578</string>
+</resources>

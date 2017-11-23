@@ -1,0 +1,26 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="horizontal_margin">16dp</dimen>
+    <dimen name="vertical_margin">16dp</dimen>
+    <dimen name="horizontal_margin_half">8dp</dimen>
+    <dimen name="vertical_margin_half">8dp</dimen>
+
+    <!--Fonts-->
+    <dimen name="et_text_size">14sp</dimen>
+    <dimen name="header_text_size">16sp</dimen>
+
+    <dimen name="list_item_height">100dp</dimen>
+
+    <dimen name="card_margin">5dp</dimen>
+    <dimen name="card_category_cover_height">140dp</dimen>
+    <dimen name="card_category_title_padding">8dp</dimen>
+    <dimen name="product_price_padding_bottom">4dp</dimen>
+    <dimen name="product_price">15sp</dimen>
+    <dimen name="card_category_title">15sp</dimen>
+
+    <dimen name="rv_horizontal_height">72dp</dimen>
+    <dimen name="rv_horizontal_height_normal">40dp</dimen>
+    <dimen name="rv_horizontal_text_size">10sp</dimen>
+    <dimen name="banner_height">150dp</dimen>
+
+</resources>

@@ -1,0 +1,2 @@
+# sporedimk
+# Android-SporediMK

@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "645326570994",
+    "firebase_url": "https://sporedimk-3168a.firebaseio.com",
+    "project_id": "sporedimk-3168a",
+    "storage_bucket": "sporedimk-3168a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:645326570994:android:7d884fbaea30dd3a",
+        "android_client_info": {
+          "package_name": "com.example.elvedin.sporedimk"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "645326570994-ukigio4rftc07pkcsrhqk1n9mfoaner3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.elvedin.sporedimk",
+            "certificate_hash": "701f888a1e32f5f63dd92ebb3a99f7a0108b3563"
+          }
+        },
+        {
+          "client_id": "645326570994-scujdq83gtsdvmkv2mm9rf1h5rpcb01p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBezRN34Phf07JwFNei__5IR5Cx4JCQqCM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "645326570994-scujdq83gtsdvmkv2mm9rf1h5rpcb01p.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

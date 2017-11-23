@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#00bfa5</color>
+    <color name="colorPrimaryDark">#ff008e76</color>
+    <color name="colorPrimaryLight">#5df2d6</color>
+    <color name="colorSecondary">#00e5ff</color>
+    <color name="colorSecondaryDark">#00b2cc</color>
+    <color name="colorSecondaryLight">#6effff</color>
+    <color name="colorAccent">#00e5ff</color>
+
+    <color name="primaryTintColor">#FF747474</color>
+    <color name="toolbarItemsColor">@android:color/black</color>
+</resources>
