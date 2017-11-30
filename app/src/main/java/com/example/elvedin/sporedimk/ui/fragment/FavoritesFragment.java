@@ -1,18 +1,16 @@
 package com.example.elvedin.sporedimk.ui.fragment;
 
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import com.bumptech.glide.Glide;
 import com.example.elvedin.sporedimk.R;
 import com.example.elvedin.sporedimk.adapter.CategoryAdapter;
 import com.example.elvedin.sporedimk.adapter.OfferAdapter;
-import com.example.elvedin.sporedimk.adapter.ProductStoreAdapter;
 import com.example.elvedin.sporedimk.model.Offer;
+import com.example.elvedin.sporedimk.products.productdetails.ProductDetailsFragment;
 import com.example.elvedin.sporedimk.ui.manager.AppHolder;
 import com.example.elvedin.sporedimk.utils.UiHelper;
 import com.google.android.gms.iid.InstanceID;
@@ -91,10 +89,15 @@ public class FavoritesFragment extends BaseFragment implements OfferAdapter.Offe
     @Override
     public void onOfferItemClicked(View view, int adapterPosition) {
         Offer offer = adapter.getOffers().get(adapterPosition);
-        ProductFragment fragment = ProductFragment.newInstance(offer);
+        ProductDetailsFragment fragment = ProductDetailsFragment.newInstance(offer);
         UiHelper.replaceFragment(getActivity().getSupportFragmentManager(),
                 R.id.containerLayoutMain,
                 fragment,
                 true, 0, 0);
+    }
+
+    @Override
+    protected boolean showBackButton() {
+        return true;
     }
 }

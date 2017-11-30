@@ -13,6 +13,7 @@ import com.example.elvedin.sporedimk.adapter.HorizontalRecyclerAdapter;
 import com.example.elvedin.sporedimk.adapter.OfferAdapter;
 import com.example.elvedin.sporedimk.model.Category;
 import com.example.elvedin.sporedimk.model.Offer;
+import com.example.elvedin.sporedimk.products.productdetails.ProductDetailsFragment;
 import com.example.elvedin.sporedimk.ui.manager.AppHolder;
 import com.example.elvedin.sporedimk.ui.view.HorizontalAdapterItem;
 import com.example.elvedin.sporedimk.utils.UiHelper;
@@ -49,7 +50,10 @@ public class HomeFragment extends BaseFragment implements HorizontalRecyclerAdap
     @Override
     protected void initViews(View contentView) {
         AdView mAdView = contentView.findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().addTestDevice("D4528B3D9CDE7BDEC56DFB086AAD06C4").build();
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice("681B64652CFE0B26BFF3F3A331E82339")
+                .addTestDevice("D4528B3D9CDE7BDEC56DFB086AAD06C4")
+                .build();
         mAdView.loadAd(adRequest);
 
         items = new ArrayList<>();
@@ -117,7 +121,7 @@ public class HomeFragment extends BaseFragment implements HorizontalRecyclerAdap
     @Override
     public void onOfferItemClicked(View view, int adapterPosition) {
         Offer offer = mfoList.get(adapterPosition);
-        ProductFragment fragment = ProductFragment.newInstance(offer);
+        ProductDetailsFragment fragment = ProductDetailsFragment.newInstance(offer);
         UiHelper.replaceFragment(getActivity().getSupportFragmentManager(),
                 R.id.containerLayoutMain,
                 fragment,

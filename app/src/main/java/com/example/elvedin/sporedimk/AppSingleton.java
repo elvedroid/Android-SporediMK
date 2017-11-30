@@ -1,19 +1,18 @@
 package com.example.elvedin.sporedimk;
 
 import com.example.elvedin.sporedimk.model.Category;
-import com.example.elvedin.sporedimk.ui.manager.network_manager.ClientInterface;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by elvedin on 10/26/17.
+ * Singleton class for keeping some data while the app is running
  */
 
 public class AppSingleton {
     private static AppSingleton instance = null;
     private List<Category> categories = null;
-    private ClientInterface clientInterface = null;
     private List<Category> defaultSuggestedCategories;
 
     public static AppSingleton getInstance() {
@@ -21,18 +20,6 @@ public class AppSingleton {
             instance = new AppSingleton();
         }
         return instance;
-    }
-
-    public ClientInterface getClientInterface() {
-        return clientInterface;
-    }
-
-    public void setClientInterface(ClientInterface clientInterface) {
-        this.clientInterface = clientInterface;
-    }
-
-    public static void setInstance(AppSingleton instance) {
-        AppSingleton.instance = instance;
     }
 
     public List<Category> getCategories() {

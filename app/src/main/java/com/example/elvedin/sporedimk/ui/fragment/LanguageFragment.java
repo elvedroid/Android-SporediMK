@@ -61,4 +61,9 @@ public class LanguageFragment extends BaseFragment implements SimpleAdapter.Simp
                 break;
         }
     }
+
+    @Override
+    protected boolean showBackButton() {
+        return true;
+    }
 }

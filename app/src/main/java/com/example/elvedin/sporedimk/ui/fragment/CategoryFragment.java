@@ -100,7 +100,7 @@ public class CategoryFragment extends BaseFragment implements CategoryAdapter.Ca
 
             @Override
             public void onFailure(@NonNull Call<List<Category>> call, @NonNull Throwable throwable) {
-                Toast.makeText(getContext(), throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), throwable.getMessage(), Toast.LENGTH_SHORT).show();
                 Log.e(TAG, "getLeafCategories", throwable);
             }
         });
@@ -204,5 +204,10 @@ public class CategoryFragment extends BaseFragment implements CategoryAdapter.Ca
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected boolean showBackButton() {
+        return true;
     }
 }

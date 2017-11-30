@@ -11,7 +11,6 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.elvedin.sporedimk.R;
 import com.example.elvedin.sporedimk.model.ProductOffers;
-import com.example.elvedin.sporedimk.ui.fragment.ProductFragment;
 import com.example.elvedin.sporedimk.ui.view.ProductStoreItem;
 
 import java.util.List;

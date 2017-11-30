@@ -1,4 +1,4 @@
-package com.example.elvedin.sporedimk.ui.fragment;
+package com.example.elvedin.sporedimk.ui.activity;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -9,13 +9,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.example.elvedin.sporedimk.Filter;
 import com.example.elvedin.sporedimk.R;
 import com.example.elvedin.sporedimk.adapter.CategoryAdapter;
 import com.example.elvedin.sporedimk.adapter.OfferAdapter;
 import com.example.elvedin.sporedimk.managers.persistence.Persistence;
-import com.example.elvedin.sporedimk.model.CatLang;
 import com.example.elvedin.sporedimk.model.Offer;
 import com.example.elvedin.sporedimk.products.productdetails.ProductDetailsFragment;
+import com.example.elvedin.sporedimk.ui.fragment.BaseFragment;
 import com.example.elvedin.sporedimk.ui.manager.AppHolder;
 import com.example.elvedin.sporedimk.ui.manager.log.LogLevel;
 import com.example.elvedin.sporedimk.utils.EndlessRecyclerViewScrollListener;
@@ -28,81 +29,46 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.example.elvedin.sporedimk.ui.fragment.CategoryFragment.FROM_CATEGORY;
+import static com.example.elvedin.sporedimk.ui.fragment.ProductListFragment.IS_LINEAR_LAYOUT_PRODUCTS;
 
 /**
- * Created by elvedin on 10/27/17.
- * Show list of products
+ * Created by elvedin on 11/26/17.
+ * Fragment that shows result offers from the search
  */
 
-public class ProductListFragment extends BaseFragment implements OfferAdapter.OfferItemInterface {
-
-    public static final String IS_LINEAR_LAYOUT_PRODUCTS = "IS_LINEAR_LAYOUT_PRODUCTS";
-    private static final String TAG = "ProductListFragment";
+public class SearchResultFragment extends BaseFragment implements OfferAdapter.OfferItemInterface {
+    private static final String QUERY = "QUERY";
+    private static final String TAG = "SearchResultFragment";
     RecyclerView recyclerView;
     List<Offer> offers;
     OfferAdapter adapter;
     GridLayoutManager mGridLayoutManager;
     LinearLayoutManager mLinearLayoutManager;
-    Integer page = 0, perPage= 32;
     private EndlessRecyclerViewScrollListener scrollListener;
-    String fromCategory = "";
     private boolean isLinearLayout = false;
-
-    public static ProductListFragment newInstance(String fromCategory) {
-        Bundle args = new Bundle();
-        args.putString(FROM_CATEGORY, fromCategory);
-        ProductListFragment fragment = new ProductListFragment();
-        fragment.setArguments(args);
-        return fragment;
-    }
+    Integer page = 0, perPage = 32;
 
     @Override
     protected int getLayoutResId() {
-        return R.layout.fragment_category;
+        return R.layout.fragment_search_result;
     }
 
     @Override
     protected String getTitle() {
-        return getString(R.string.title_products);
+        return getArguments().getString(QUERY);
     }
+
+
 
     @Override
     protected void initViews(View contentView) {
-        if (getArguments() != null) {
-            fromCategory = getArguments().getString(FROM_CATEGORY);
-        }
+        getActivity().invalidateOptionsMenu();
+        initRecyclerView(contentView);
+        getOffers();
+    }
+
+    private void initRecyclerView(View contentView) {
         offers = new ArrayList<>();
-        bindView(contentView);
-        getProducts(fromCategory);
-    }
-
-    private void loadNextPage(int page) {
-        this.page = page;
-        getProducts(fromCategory);
-    }
-
-    private void getProducts(String fromCategory) {
-        Call<List<Offer>> call = AppHolder.getInstance().getClientInterface().getOffers(new CatLang(fromCategory, "en"), page, perPage);
-        call.enqueue(new Callback<List<Offer>>() {
-            @Override
-            public void onResponse(@NonNull Call<List<Offer>> call, @NonNull Response<List<Offer>> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    offers.addAll(response.body());
-                    adapter.notifyDataSetChanged();
-                } else {
-                    AppHolder.logWithToast(getActivity(), LogLevel.ERROR, TAG, getString(R.string.connection_error));
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<List<Offer>> call, @NonNull Throwable t) {
-                AppHolder.logWithToast(getActivity(), LogLevel.ERROR, TAG, t.getMessage());
-            }
-        });
-    }
-
-    private void bindView(View contentView) {
         recyclerView = contentView.findViewById(R.id.rv_categories);
 
         mGridLayoutManager = new GridLayoutManager(getActivity(), 2);
@@ -116,14 +82,48 @@ public class ProductListFragment extends BaseFragment implements OfferAdapter.Of
         scrollListener = new EndlessRecyclerViewScrollListener(isLinearLayout ? mLinearLayoutManager : mGridLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-
-                loadNextPage(page);
+                loadMore(page);
             }
         };
         recyclerView.addOnScrollListener(scrollListener);
         recyclerView.setAdapter(adapter);
     }
 
+    private void loadMore(int page) {
+        this.page = page;
+        getOffers();
+    }
+
+    private void getOffers() {
+        String query = getArguments().getString(QUERY);
+        Call<List<Offer>> call = AppHolder.getInstance().getClientInterface().getFilteredProducts(query != null ? query : "", Filter.language, page, perPage);
+        call.enqueue(new Callback<List<Offer>>() {
+            @Override
+            public void onResponse(@NonNull Call<List<Offer>> call, @NonNull Response<List<Offer>> response) {
+                if (response.body() != null) {
+                    AppHolder.log(LogLevel.INFO, TAG, "OnResponseNOTNullBody");
+                    offers.addAll(response.body());
+                    adapter.notifyDataSetChanged();
+                } else {
+                    AppHolder.logWithToast(getActivity(), LogLevel.ERROR, TAG, "OnResponseNullBody");
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<List<Offer>> call, @NonNull Throwable t) {
+                AppHolder.logWithToast(getActivity(), LogLevel.ERROR, TAG, t.getMessage());
+
+            }
+        });
+    }
+
+    public static SearchResultFragment newInstance(String query) {
+        Bundle args = new Bundle();
+        args.putString(QUERY, query);
+        SearchResultFragment fragment = new SearchResultFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     public void onOfferItemClicked(View view, int adapterPosition) {
@@ -137,7 +137,7 @@ public class ProductListFragment extends BaseFragment implements OfferAdapter.Of
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
+        switch (item.getItemId()){
             case R.id.menu_cards_view:
                 adapter.setItemType(CategoryAdapter.ITEM_TYPE_GRID);
                 recyclerView.setLayoutManager(mGridLayoutManager);

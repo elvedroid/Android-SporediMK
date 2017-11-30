@@ -3,14 +3,17 @@ package com.example.elvedin.sporedimk.ui.manager;
 import android.content.Context;
 import android.widget.Toast;
 
-import com.example.elvedin.sporedimk.model.Device;
 import com.example.elvedin.sporedimk.ui.manager.log.ILogger;
 import com.example.elvedin.sporedimk.ui.manager.log.LogLevel;
 import com.example.elvedin.sporedimk.ui.manager.network_manager.ClientInterface;
+import com.example.elvedin.sporedimk.ui.manager.network_manager.RemoteRepository;
 import com.example.elvedin.sporedimk.ui.manager.persistance.IPersistance;
+
+import retrofit2.Retrofit;
 
 /**
  * Created by elvedin on 10/26/17.
+ * Application interfaces helper
  */
 
 public class AppHolder {
@@ -20,21 +23,13 @@ public class AppHolder {
     private ILogger logger = null;
     private IPersistance persistance = null;
     private ClientInterface clientInterface = null;
-    private Context context;
+    private RemoteRepository remoteRepository;
 
-    private String deviceId = null;
-    private String phoneNr = null;
-
-    private Device device = null;
-
-    private String language  = null;
-
-    private AppHolder(){
-
+    private AppHolder() {
     }
 
     public static AppHolder getInstance() {
-        if(instance == null){
+        if (instance == null) {
             instance = new AppHolder();
         }
         return instance;
@@ -44,63 +39,29 @@ public class AppHolder {
         this.logger = logger;
     }
 
-    public ILogger getLogger() {
+    private ILogger getLogger() {
         return logger;
     }
 
-    public static void log(LogLevel logLevel, String message, boolean showToast){
-        if(message!=null) {
-            getInstance().getLogger().log(logLevel, "mWallet", message);
-            if(showToast){
-                Toast.makeText(getInstance().getContext(), message, Toast.LENGTH_SHORT).show();
-            }
+    public static void logWithToast(Context context, LogLevel logLevel, String tag, String message) {
+        if (message != null) {
+            getInstance().getLogger().log(logLevel, tag, message);
+            Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
         }
     }
 
-    public Context getContext() {
-        return context;
-    }
-
-    public void setContext(Context context) {
-        this.context = context;
+    public static void log(LogLevel logLevel, String tag, String message) {
+        if (message != null) {
+            getInstance().getLogger().log(logLevel, tag, message);
+        }
     }
 
     public IPersistance getPersistance() {
         return persistance;
     }
 
-    public String getDeviceId() {
-        if(deviceId == null)
-            deviceId = "";
-        return deviceId;
-    }
-
-    public void setDeviceId(String deviceId) {
-        this.deviceId = deviceId;
-    }
-
-
-
     public ClientInterface getClientInterface() {
         return clientInterface;
-    }
-
-    public String getPhoneNr() {
-        return phoneNr;
-    }
-
-    public void setPhoneNr(String phoneNr) {
-        this.phoneNr = phoneNr;
-    }
-
-    public Device getDevice() {
-        if(device == null)
-            device = new Device();
-        return device;
-    }
-
-    public void setDevice(Device device) {
-        this.device = device;
     }
 
     public void setPersistance(IPersistance persistance) {
@@ -111,12 +72,12 @@ public class AppHolder {
         this.clientInterface = clientInterface;
     }
 
-    public String getLanguage() {
-        return language;
+    public RemoteRepository getRemoteRepository() {
+        return remoteRepository;
     }
 
-    public void setLanguage(String language) {
-        this.language = language;
+    public void setRemoteRepository(RemoteRepository remoteRepository) {
+        this.remoteRepository = remoteRepository;
     }
 }
 

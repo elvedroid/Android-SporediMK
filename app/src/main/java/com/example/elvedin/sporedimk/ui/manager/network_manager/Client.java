@@ -1,7 +1,8 @@
 package com.example.elvedin.sporedimk.ui.manager.network_manager;
 
+import android.support.annotation.NonNull;
+
 import com.example.elvedin.sporedimk.Filter;
-import com.example.elvedin.sporedimk.MainApplication;
 import com.example.elvedin.sporedimk.utils.Constants;
 import com.example.elvedin.sporedimk.utils.Utils;
 
@@ -13,10 +14,12 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by elvedin on 10/26/17.
+ * Retrofit client
  */
 
 public class Client {
@@ -30,7 +33,7 @@ public class Client {
 
             OkHttpClient okHttpClient = okHttpBuilder.addInterceptor(new Interceptor() {
                 @Override
-                public Response intercept(Chain chain) throws IOException {
+                public Response intercept(@NonNull Chain chain) throws IOException {
                     Request request = chain.request().newBuilder()
                             .addHeader(Constants.ACCEPT_HEADER, "application/json")
                             .build();
@@ -48,6 +51,7 @@ public class Client {
                             );
 
             retrofit = builder
+                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .client(okHttpClient)
                     .build();
         }

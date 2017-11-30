@@ -1,14 +1,17 @@
 package com.example.elvedin.sporedimk.utils;
 
 /**
- * Created by Goni on 7/31/2017.
+ * Created by Elvedin on 7/31/2017.
+ * Application Constants
  */
 
 public class Constants {
 
     public static final String SHARED_PREFERENCES_NAME = "AuthStatePreference";
 
-    public static final String BASE_URL = "http://10.10.10.34:8080";
+//    public static final String BASE_URL = "http://10.10.10.34:8080";
+//    public static final String BASE_URL = "http://192.168.43.7:8080";
+    public static final String BASE_URL = "http://10.0.1.15:8080";
 //    public static final String BASE_URL = "http://192.168.0.102:8080";
 //    public static final String BASE_URL = "http://192.168.0.105:8080";
     public static final String PRODUCTS_URL = "/private/products";
@@ -27,6 +30,11 @@ public class Constants {
     public static final String CHECK_IF_PRODUCT_IS_FAVORITE = BASE_URL + PRODUCTS_URL + "/is_product_favorite";
     public static final String GET_MY_FAVORITE_PRODUCTS = BASE_URL + PRODUCTS_URL + "/get_my_favorites";
     public static final String GET_MOST_FAVORITE_PRODUCTS = BASE_URL + PRODUCTS_URL + "/get_most_favorites";
+    public static final String GET_FILTERED_PRODUCTS = BASE_URL + PRODUCTS_URL + "/filter-search";
+    public static final String SEARCH_PHRASE = "search_phrase";
+    public static final String LANG = "lang";
+    public static final String PAGE = "page";
+    public static final String PER_PAGE = "per_page";
 
     //header keys
     public static final String REFRESH_TOKEN_HEADER = "refresh-token";

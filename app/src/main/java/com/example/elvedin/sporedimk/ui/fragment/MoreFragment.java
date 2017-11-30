@@ -63,4 +63,9 @@ public class MoreFragment extends BaseFragment implements SimpleAdapter.SimpleAd
         }
     }
 
+    @Override
+    protected boolean showBackButton() {
+        return true;
+    }
+
 }

@@ -13,6 +13,7 @@ import com.example.elvedin.sporedimk.ui.manager.log.LogCatLogger;
 import com.example.elvedin.sporedimk.ui.manager.log.LogLevel;
 import com.example.elvedin.sporedimk.ui.manager.network_manager.Client;
 import com.example.elvedin.sporedimk.ui.manager.network_manager.ClientInterface;
+import com.example.elvedin.sporedimk.ui.manager.network_manager.RemoteRepository;
 import com.example.elvedin.sporedimk.ui.manager.persistance.SharedPreferencesManager;
 import com.example.elvedin.sporedimk.utils.Constants;
 import com.example.elvedin.sporedimk.utils.LocaleHelper;
@@ -29,6 +30,7 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
 public class MainApplication extends MultiDexApplication {
+    private static final String TAG = "MainApplication";
     private static MainApplication mainApplication;
 
     public static MainApplication getInstance() {
@@ -45,10 +47,10 @@ public class MainApplication extends MultiDexApplication {
         if (Filter.test)
             initTrustManagerForAllHTTPSServers();
 
-        AppHolder.getInstance().setContext(getApplicationContext());
         AppHolder.getInstance().setLogger(new LogCatLogger());
         AppHolder.getInstance().setPersistance(new SharedPreferencesManager(getApplicationContext()));
         AppHolder.getInstance().setClientInterface(Client.getClient(Constants.BASE_URL, false).create(ClientInterface.class));
+        AppHolder.getInstance().setRemoteRepository(new RemoteRepository(Client.getClient(Constants.BASE_URL, false)));
 
         Persistence.getInstance().init(new SharedPreferencesPersistence(getApplicationContext()));
     }
@@ -80,9 +82,9 @@ public class MainApplication extends MultiDexApplication {
             }, null);
             HttpsURLConnection.setDefaultSSLSocketFactory(ctx.getSocketFactory());
         } catch (NoSuchAlgorithmException e) {
-            AppHolder.log(LogLevel.ERROR, e.getMessage(), false);
+            AppHolder.log(LogLevel.ERROR, TAG, e.getMessage());
         } catch (KeyManagementException e) {
-            AppHolder.log(LogLevel.ERROR, e.getMessage(), false);
+            AppHolder.log(LogLevel.ERROR, TAG, e.getMessage());
         }
         HttpsURLConnection.setDefaultHostnameVerifier(SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
     }
@@ -90,7 +92,6 @@ public class MainApplication extends MultiDexApplication {
     @Override
     protected void attachBaseContext(Context base) {
         String lang = "mk";
-        AppHolder.getInstance().setLanguage(lang);
         super.attachBaseContext(LocaleHelper.onAttach(base, lang));
         MultiDex.install(this);
     }

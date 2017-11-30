@@ -87,6 +87,12 @@ public class UiHelper {
 
     }
 
+    public static void clearBackstackToHome(FragmentManager fm) {
+        while (fm.getBackStackEntryCount() > 1) {
+            fm.popBackStackImmediate();
+        }
+    }
+
     public static class DatePickerFragment extends DialogFragment
             implements DatePickerDialog.OnDateSetListener {
 

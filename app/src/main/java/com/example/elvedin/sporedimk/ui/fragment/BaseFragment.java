@@ -9,8 +9,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.elvedin.sporedimk.Filter;
 import com.example.elvedin.sporedimk.R;
 import com.example.elvedin.sporedimk.ui.activity.BaseActivity;
+import com.example.elvedin.sporedimk.ui.manager.AppHolder;
+import com.example.elvedin.sporedimk.ui.manager.log.LogLevel;
 
 /**
  * Created by elvedin on 9/23/17.
@@ -35,9 +38,9 @@ public abstract class BaseFragment extends Fragment {
             ((BaseActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(showBackButton());
         } catch (Throwable e) {
             getActivity().finish();
-//            if(Filter.isDebuggingMode) {
-//                Log.e(TAG, "error initializing fragment", e);
-//            }
+            if(Filter.isDebuggingMode) {
+                AppHolder.log(LogLevel.ERROR, TAG, e.getMessage());
+            }
         }
 
         return contentView;

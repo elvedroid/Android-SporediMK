@@ -26,4 +26,6 @@
     <string name="lang_en">English</string>
     <string name="lang_mk">Македонски</string>
     <string name="connection_error">Connection Error</string>
+    <string name="search_result">Search Result</string>
+    <string name="title_products">Products</string>
 </resources>
