@@ -176,11 +176,13 @@ public class CategoryFragment extends BaseFragment implements CategoryAdapter.Ca
             UiHelper.replaceFragment(getActivity().getSupportFragmentManager(),
                     R.id.containerLayoutMain,
                     ProductListFragment.newInstance(category.getName()),
+                    ProductListFragment.TAG,
                     true, 0, 0);
         } else {
             UiHelper.replaceFragment(getActivity().getSupportFragmentManager(),
                     R.id.containerLayoutMain,
                     CategoryFragment.newInstance(category.getName()),
+                    TAG + category.getName(),
                     true, 0, 0);
         }
     }
@@ -210,4 +212,15 @@ public class CategoryFragment extends BaseFragment implements CategoryAdapter.Ca
     protected boolean showBackButton() {
         return true;
     }
+
+    @Override
+    protected boolean showSearchView() {
+        return true;
+    }
+
+    @Override
+    protected boolean showMenuItems() {
+        return true;
+    }
+
 }

@@ -10,4 +10,5 @@
 
     <color name="primaryTintColor">#FF747474</color>
     <color name="toolbarItemsColor">@android:color/black</color>
+    <color name="card_item_background">#F4FF81</color>
 </resources>

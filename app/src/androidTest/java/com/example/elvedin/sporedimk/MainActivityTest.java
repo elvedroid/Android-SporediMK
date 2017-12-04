@@ -1,14 +1,12 @@
 package com.example.elvedin.sporedimk;
 
-import android.content.Context;
-import android.support.test.InstrumentationRegistry;
 import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.v7.widget.Toolbar;
 import android.widget.TextView;
 
-import com.example.elvedin.sporedimk.ui.activity.MainActivity;
+import com.example.elvedin.sporedimk.main.MainActivity;
 
 import org.junit.Rule;
 import org.junit.Test;

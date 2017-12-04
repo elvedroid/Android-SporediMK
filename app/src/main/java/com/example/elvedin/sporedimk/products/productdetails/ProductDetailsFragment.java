@@ -15,13 +15,12 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.elvedin.sporedimk.MainApplication;
 import com.example.elvedin.sporedimk.R;
 import com.example.elvedin.sporedimk.adapter.ProductStoreAdapter;
 import com.example.elvedin.sporedimk.model.Favorites;
 import com.example.elvedin.sporedimk.model.Offer;
 import com.example.elvedin.sporedimk.model.ProductOffers;
-import com.example.elvedin.sporedimk.scheduler.SchedulerProvider;
-import com.example.elvedin.sporedimk.ui.activity.BaseActivity;
 import com.example.elvedin.sporedimk.ui.fragment.BaseFragment;
 import com.example.elvedin.sporedimk.ui.manager.AppHolder;
 import com.example.elvedin.sporedimk.ui.manager.log.LogLevel;
@@ -30,6 +29,8 @@ import com.google.android.gms.iid.InstanceID;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -44,20 +45,29 @@ public class ProductDetailsFragment extends BaseFragment implements ProductStore
     public final static String TAG = "ProductDetailsFragment";
     public final static String EXTRA_OFFER = "EXTRA_OFFER";
 
-    @BindView(R.id.fab_favorites) FloatingActionButton floatingActionButton;
-    @BindView(R.id.product_image) ImageView mainImageView;
-    @BindView(R.id.rv_stores) RecyclerView rvStores;
-//    @BindView(R.id.rv_similar_prodcuts) RecyclerView rvSimilarProducts;
-    @BindView(R.id.tv_description) TextView tvDesc;
+    @BindView(R.id.fab_favorites)
+    FloatingActionButton floatingActionButton;
+    @BindView(R.id.product_image)
+    ImageView mainImageView;
+    @BindView(R.id.rv_stores)
+    RecyclerView rvStores;
+    //    @BindView(R.id.rv_similar_prodcuts) RecyclerView rvSimilarProducts;
+    @BindView(R.id.tv_description)
+    TextView tvDesc;
 
     ProgressBar progressBar;
 
-    RemoteRepository repository;
+
     ProductDetailsPresenter presenter;
+//    @Inject
+//    ProductDetailsContract.Presenter presenter;
+
     Offer offer;
     Boolean isFavorite = false;
     ProductStoreAdapter productStoreAdapter;
     List<ProductOffers> productOffers;
+    @Inject
+    RemoteRepository repository;
 
     public static ProductDetailsFragment newInstance(Offer offer) {
         Bundle args = new Bundle();
@@ -65,6 +75,18 @@ public class ProductDetailsFragment extends BaseFragment implements ProductStore
         ProductDetailsFragment fragment = new ProductDetailsFragment();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        presenter.takeView(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        presenter.dropView();
+        super.onDestroy();
     }
 
     @Override
@@ -85,6 +107,7 @@ public class ProductDetailsFragment extends BaseFragment implements ProductStore
     @Override
     protected void initViews(View contentView) {
         ButterKnife.bind(this, contentView);
+        ((MainApplication)getActivity().getApplication()).getAppComponent().inject(this);
 
         offer = getArguments().getParcelable(EXTRA_OFFER);
         productOffers = new ArrayList<>();
@@ -95,12 +118,7 @@ public class ProductDetailsFragment extends BaseFragment implements ProductStore
                 .into(mainImageView);
         tvDesc.setText(offer.getProduct().getDescription());
         initRecyclerViews();
-
-        if (getActivity() instanceof BaseActivity) {
-            ((BaseActivity) getActivity()).setHideSearchMenuItem(true);
-        }
-
-        presenter = new ProductDetailsPresenter(AppHolder.getInstance().getRemoteRepository(), this, new SchedulerProvider());
+        presenter = new ProductDetailsPresenter(offer, repository, this);
         presenter.checkIfProductIsInFavorites(new Favorites(InstanceID.getInstance(getContext()).getId(), offer.getProduct().getName()));
         presenter.loadOffersForSameProduct(offer.getProduct());
     }
@@ -159,4 +177,5 @@ public class ProductDetailsFragment extends BaseFragment implements ProductStore
     public void showError(String message) {
         AppHolder.logWithToast(getContext(), LogLevel.ERROR, TAG, message);
     }
+
 }

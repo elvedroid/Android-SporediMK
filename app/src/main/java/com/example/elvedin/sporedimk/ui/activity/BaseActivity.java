@@ -41,7 +41,7 @@ public class BaseActivity extends AppCompatActivity {
 
     private static final int REQUEST_PHONE_STATE = 0;
     private Boolean showMenuItemsChooseView = false;
-    private Boolean hideSearchMenuItem = false;
+    private Boolean showSearchMenuItem = false;
 
     public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 1;
     Toolbar toolbar;
@@ -73,12 +73,7 @@ public class BaseActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                FragmentManager fm = getSupportFragmentManager();
-                if (fm != null && fm.getBackStackEntryCount() > 0) {
-                    fm.popBackStack();
-                } else {
-                    finish();
-                }
+                onBackPressed();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -88,10 +83,11 @@ public class BaseActivity extends AppCompatActivity {
     public void setTitle(String title) {
         if (getSupportActionBar() != null) {
 
-            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+            Toolbar toolbar = findViewById(R.id.toolbar);
             TextView mTitle = toolbar.findViewById(R.id.toolbar_title);
             setSupportActionBar(toolbar);
-            mTitle.setText(title);
+            if (mTitle != null)
+                mTitle.setText(title);
 
             getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
@@ -178,12 +174,12 @@ public class BaseActivity extends AppCompatActivity {
         this.showMenuItemsChooseView = showMenuItemsChooseView;
     }
 
-    public Boolean getHideSearchMenuItem() {
-        return hideSearchMenuItem;
+    public Boolean getShowSearchMenuItem() {
+        return showSearchMenuItem;
     }
 
-    public void setHideSearchMenuItem(Boolean hideSearchMenuItem) {
-        this.hideSearchMenuItem = hideSearchMenuItem;
+    public void setShowSearchMenuItem(Boolean showSearchMenuItem) {
+        this.showSearchMenuItem = showSearchMenuItem;
         invalidateOptionsMenu();
     }
 

@@ -1,4 +1,4 @@
-package com.example.elvedin.sporedimk.ui.activity;
+package com.example.elvedin.sporedimk.main;
 
 import android.app.SearchManager;
 import android.content.Context;
@@ -6,37 +6,37 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 
-import com.example.elvedin.sporedimk.Filter;
 import com.example.elvedin.sporedimk.R;
-import com.example.elvedin.sporedimk.model.Offer;
+import com.example.elvedin.sporedimk.model.Category;
+import com.example.elvedin.sporedimk.ui.activity.BaseActivity;
+import com.example.elvedin.sporedimk.ui.activity.SearchResultFragment;
 import com.example.elvedin.sporedimk.ui.fragment.BaseFragment;
 import com.example.elvedin.sporedimk.ui.fragment.CategoryFragment;
 import com.example.elvedin.sporedimk.ui.fragment.FavoritesFragment;
 import com.example.elvedin.sporedimk.ui.fragment.HomeFragment;
 import com.example.elvedin.sporedimk.ui.fragment.MoreFragment;
-import com.example.elvedin.sporedimk.ui.fragment.ProductListFragment;
-import com.example.elvedin.sporedimk.ui.manager.AppHolder;
-import com.example.elvedin.sporedimk.ui.manager.log.LogLevel;
+import com.example.elvedin.sporedimk.ui.manager.network_manager.RemoteRepository;
 import com.example.elvedin.sporedimk.utils.BottomNavigationViewHelper;
 import com.example.elvedin.sporedimk.utils.Constants;
 import com.example.elvedin.sporedimk.utils.UiHelper;
 
-import java.util.ArrayList;
-import java.util.List;
+import javax.inject.Inject;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
-public class MainActivity extends BaseActivity implements FragmentManager.OnBackStackChangedListener {
+public class MainActivity extends BaseActivity {
 
     private static final String TAG = "MainActivity";
+    @BindView(R.id.navigation)
+    BottomNavigationView navigation;
+
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
         @Override
@@ -50,14 +50,15 @@ public class MainActivity extends BaseActivity implements FragmentManager.OnBack
                             false, 0, 0);
                     return true;
                 case R.id.navigation_categories:
-                    UiHelper.clearBackstackToHome(getSupportFragmentManager());
+                    UiHelper.clearBackstack(getSupportFragmentManager());
                     UiHelper.replaceFragment(getSupportFragmentManager(),
                             R.id.containerLayoutMain,
                             CategoryFragment.newInstance(Constants.ROOT_CATEGORIES),
+                            CategoryFragment.TAG,
                             true, 0, 0);
                     return true;
                 case R.id.navigation_favorite:
-                    UiHelper.clearBackstackToHome(getSupportFragmentManager());
+                    UiHelper.clearBackstack(getSupportFragmentManager());
                     UiHelper.replaceFragment(getSupportFragmentManager(),
                             R.id.containerLayoutMain,
                             FavoritesFragment.newInstance(),
@@ -80,11 +81,12 @@ public class MainActivity extends BaseActivity implements FragmentManager.OnBack
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setHomeAsUp(false);
-        bindView();
-        getSupportFragmentManager().addOnBackStackChangedListener(this);
+        ButterKnife.bind(this);
 
-        handleIntent(getIntent());
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        BottomNavigationViewHelper.disableShiftMode(navigation);
+
+//        handleIntent(getIntent());
 
         if (savedInstanceState == null && !Intent.ACTION_SEARCH.equals(getIntent().getAction())) {
             initHomeFragment();
@@ -94,21 +96,20 @@ public class MainActivity extends BaseActivity implements FragmentManager.OnBack
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        handleIntent(intent);
+//        handleIntent(intent);
     }
 
     private void handleIntent(Intent intent) {
-
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             final String query = intent.getStringExtra(SearchManager.QUERY);
             //use the query to search your data somehow
+            UiHelper.clearBackstack(getSupportFragmentManager());
             UiHelper.replaceFragment(getSupportFragmentManager(),
                     R.id.containerLayoutMain,
                     SearchResultFragment.newInstance(query),
                     false, 0, 0);
         }
     }
-
 
     private void initHomeFragment() {
         UiHelper.clearBackstack(getSupportFragmentManager());
@@ -133,7 +134,7 @@ public class MainActivity extends BaseActivity implements FragmentManager.OnBack
             listView.setVisible(getShowMenuItemsChooseView());
         }
         if (search != null) {
-            search.setVisible(!getHideSearchMenuItem());
+            search.setVisible(getShowSearchMenuItem());
             // Associate searchable configuration with the SearchView
             SearchManager searchManager =
                     (SearchManager) getSystemService(Context.SEARCH_SERVICE);
@@ -142,38 +143,39 @@ public class MainActivity extends BaseActivity implements FragmentManager.OnBack
             searchView.setSearchableInfo(
                     searchManager.getSearchableInfo(getComponentName()));
 
-        }
+            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+                    UiHelper.replaceFragment(getSupportFragmentManager(),
+                            R.id.containerLayoutMain,
+                            SearchResultFragment.newInstance(query),
+                            true, 0, 0);
+                    return true;
+                }
 
+                @Override
+                public boolean onQueryTextChange(String newText) {
+                    return false;
+                }
+            });
+        }
         return true;
     }
 
-    private void bindView() {
-        BottomNavigationView navigation = findViewById(R.id.navigation);
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-        BottomNavigationViewHelper.disableShiftMode(navigation);
-    }
-
-
     @Override
-    public void onBackStackChanged() {
+    public void onBackPressed() {
         BaseFragment fragment = (BaseFragment) getSupportFragmentManager().findFragmentById(R.id.containerLayoutMain);
+        if (fragment instanceof SearchResultFragment){
+            navigation.setSelectedItemId(R.id.navigation_home);
+            return;
+        }
+
+        super.onBackPressed();
+
         if (fragment != null) {
-            if (fragment instanceof CategoryFragment
-                    || fragment instanceof ProductListFragment
-                    || fragment instanceof FavoritesFragment
-                    || fragment instanceof SearchResultFragment) {
-                setShowMenuItemsChooseView(true);
-                invalidateOptionsMenu();
-            } else {
-                setShowMenuItemsChooseView(false);
-                invalidateOptionsMenu();
-            }
-            if (fragment instanceof MoreFragment) {
-                setHideSearchMenuItem(true);
-            } else {
-                setHideSearchMenuItem(false);
+            if (fragment instanceof HomeFragment) {
+                navigation.setSelectedItemId(R.id.navigation_home);
             }
         }
     }
-
 }

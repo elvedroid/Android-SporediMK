@@ -6,6 +6,9 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -58,11 +61,8 @@ public class SearchResultFragment extends BaseFragment implements OfferAdapter.O
         return getArguments().getString(QUERY);
     }
 
-
-
     @Override
     protected void initViews(View contentView) {
-        getActivity().invalidateOptionsMenu();
         initRecyclerView(contentView);
         getOffers();
     }
@@ -137,7 +137,7 @@ public class SearchResultFragment extends BaseFragment implements OfferAdapter.O
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.menu_cards_view:
                 adapter.setItemType(CategoryAdapter.ITEM_TYPE_GRID);
                 recyclerView.setLayoutManager(mGridLayoutManager);
@@ -157,7 +157,40 @@ public class SearchResultFragment extends BaseFragment implements OfferAdapter.O
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        MenuItem search = menu.findItem(R.id.menu_search);
+        if (search != null && search.getActionView() != null) {
+            search.expandActionView();
+            ((SearchView) search.getActionView()).setQuery(getArguments().getString(QUERY), false);
+            search.getActionView().clearFocus();
+            search.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+                @Override
+                public boolean onMenuItemActionExpand(MenuItem menuItem) {
+                    return false;
+                }
+
+                @Override
+                public boolean onMenuItemActionCollapse(MenuItem menuItem) {
+                    getActivity().onBackPressed();
+                    return true;
+                }
+            });
+        }
+    }
+
+    @Override
     protected boolean showBackButton() {
+        return true;
+    }
+
+    @Override
+    protected boolean showSearchView() {
+        return true;
+    }
+
+    @Override
+    protected boolean showMenuItems() {
         return true;
     }
 }

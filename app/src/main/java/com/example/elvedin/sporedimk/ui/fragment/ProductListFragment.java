@@ -38,7 +38,7 @@ import static com.example.elvedin.sporedimk.ui.fragment.CategoryFragment.FROM_CA
 public class ProductListFragment extends BaseFragment implements OfferAdapter.OfferItemInterface {
 
     public static final String IS_LINEAR_LAYOUT_PRODUCTS = "IS_LINEAR_LAYOUT_PRODUCTS";
-    private static final String TAG = "ProductListFragment";
+    public static final String TAG = "ProductListFragment";
     RecyclerView recyclerView;
     List<Offer> offers;
     OfferAdapter adapter;
@@ -129,9 +129,10 @@ public class ProductListFragment extends BaseFragment implements OfferAdapter.Of
     public void onOfferItemClicked(View view, int adapterPosition) {
         Offer offer = adapter.getOffers().get(adapterPosition);
         ProductDetailsFragment fragment = ProductDetailsFragment.newInstance(offer);
-        UiHelper.replaceFragment(getActivity().getSupportFragmentManager(),
+        UiHelper.addFragment(getActivity().getSupportFragmentManager(),
                 R.id.containerLayoutMain,
                 fragment,
+                ProductDetailsFragment.TAG,
                 true, 0, 0);
     }
 
@@ -141,6 +142,7 @@ public class ProductListFragment extends BaseFragment implements OfferAdapter.Of
             case R.id.menu_cards_view:
                 adapter.setItemType(CategoryAdapter.ITEM_TYPE_GRID);
                 recyclerView.setLayoutManager(mGridLayoutManager);
+                scrollListener.setmLayoutManager(mGridLayoutManager);
                 adapter.notifyDataSetChanged();
                 isLinearLayout = false;
                 Persistence.setBoolean(IS_LINEAR_LAYOUT_PRODUCTS, isLinearLayout);
@@ -148,6 +150,7 @@ public class ProductListFragment extends BaseFragment implements OfferAdapter.Of
             case R.id.menu_list_view:
                 adapter.setItemType(CategoryAdapter.ITEM_TYPE_LIST);
                 recyclerView.setLayoutManager(mLinearLayoutManager);
+                scrollListener.setmLayoutManager(mLinearLayoutManager);
                 adapter.notifyDataSetChanged();
                 isLinearLayout = true;
                 Persistence.setBoolean(IS_LINEAR_LAYOUT_PRODUCTS, isLinearLayout);
@@ -158,6 +161,16 @@ public class ProductListFragment extends BaseFragment implements OfferAdapter.Of
 
     @Override
     protected boolean showBackButton() {
+        return true;
+    }
+
+    @Override
+    protected boolean showSearchView() {
+        return true;
+    }
+
+    @Override
+    protected boolean showMenuItems() {
         return true;
     }
 }

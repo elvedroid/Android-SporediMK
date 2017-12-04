@@ -128,4 +128,9 @@ public class HomeFragment extends BaseFragment implements HorizontalRecyclerAdap
                 true, 0, 0);
     }
 
+    @Override
+    protected boolean showSearchView() {
+        return true;
+    }
+
 }

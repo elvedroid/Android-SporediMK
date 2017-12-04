@@ -1,5 +1,6 @@
 package com.example.elvedin.sporedimk.products.productdetails;
 
+import com.example.elvedin.sporedimk.BasePresenter;
 import com.example.elvedin.sporedimk.model.Favorites;
 import com.example.elvedin.sporedimk.model.Product;
 import com.example.elvedin.sporedimk.model.ProductOffers;
@@ -22,7 +23,7 @@ public interface ProductDetailsContract {
         void showError(String message);
     }
 
-    interface UserActionsListener {
+    interface Presenter extends BasePresenter {
 
         void loadOffersForSameProduct(Product product);
 

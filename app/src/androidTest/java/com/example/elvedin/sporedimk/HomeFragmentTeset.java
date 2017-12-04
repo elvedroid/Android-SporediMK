@@ -5,8 +5,7 @@ import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.example.elvedin.sporedimk.ui.activity.MainActivity;
-import com.example.elvedin.sporedimk.ui.fragment.HomeFragment;
+import com.example.elvedin.sporedimk.main.MainActivity;
 
 import org.junit.Rule;
 import org.junit.Test;

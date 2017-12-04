@@ -6,6 +6,10 @@ import android.support.multidex.MultiDexApplication;
 import android.util.Log;
 import android.webkit.WebView;
 
+import com.example.elvedin.sporedimk.di.component.AppComponent;
+import com.example.elvedin.sporedimk.di.component.DaggerAppComponent;
+import com.example.elvedin.sporedimk.di.module.AppModule;
+import com.example.elvedin.sporedimk.di.module.NetModule;
 import com.example.elvedin.sporedimk.managers.persistence.Persistence;
 import com.example.elvedin.sporedimk.managers.persistence.SharedPreferencesPersistence;
 import com.example.elvedin.sporedimk.ui.manager.AppHolder;
@@ -36,7 +40,7 @@ public class MainApplication extends MultiDexApplication {
     public static MainApplication getInstance() {
         return mainApplication;
     }
-
+    AppComponent appComponent;
 
     @Override
     public void onCreate() {
@@ -53,6 +57,11 @@ public class MainApplication extends MultiDexApplication {
         AppHolder.getInstance().setRemoteRepository(new RemoteRepository(Client.getClient(Constants.BASE_URL, false)));
 
         Persistence.getInstance().init(new SharedPreferencesPersistence(getApplicationContext()));
+        appComponent = DaggerAppComponent.builder()
+                .appModule(new AppModule(this))
+                .netModule(new NetModule(Constants.BASE_URL))
+                .build();
+
     }
 
 
@@ -95,4 +104,10 @@ public class MainApplication extends MultiDexApplication {
         super.attachBaseContext(LocaleHelper.onAttach(base, lang));
         MultiDex.install(this);
     }
+
+    public AppComponent getAppComponent() {
+        return appComponent;
+    }
+
+
 }

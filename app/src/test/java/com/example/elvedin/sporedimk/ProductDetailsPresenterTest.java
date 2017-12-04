@@ -50,16 +50,8 @@ public class ProductDetailsPresenterTest {
     public void setup() {
         MockitoAnnotations.initMocks(this);
 
-//        Topics topics = new Topics(1, "Discern The Beach");
-//        Topics topicsTwo = new Topics(2, "Discern The Football Player");
-//        mList = new ArrayList<>();
-//        mList.add(topics);
-//        mList.add(topicsTwo);
-//
         immediateSchedulerProvider = new ImmediateSchedulerProvider();
         presenter = new ProductDetailsPresenter(repository, view, immediateSchedulerProvider);
-
-
     }
 
     @Test

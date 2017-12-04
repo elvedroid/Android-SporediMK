@@ -9,6 +9,8 @@ import com.example.elvedin.sporedimk.model.ProductOffers;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import io.reactivex.Observable;
 import retrofit2.Call;
 import retrofit2.Retrofit;
@@ -20,6 +22,7 @@ import retrofit2.Retrofit;
 public class RemoteRepository implements ClientInterface {
     private ClientInterface api;
 
+    @Inject
     public RemoteRepository(Retrofit retrofit) {
         this.api = retrofit.create(ClientInterface.class);
     }

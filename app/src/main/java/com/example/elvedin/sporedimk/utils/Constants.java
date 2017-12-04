@@ -10,7 +10,7 @@ public class Constants {
     public static final String SHARED_PREFERENCES_NAME = "AuthStatePreference";
 
 //    public static final String BASE_URL = "http://10.10.10.34:8080";
-//    public static final String BASE_URL = "http://192.168.43.7:8080";
+//    public static final String BASE_URL = "http://192.168.43.76:8080";
     public static final String BASE_URL = "http://10.0.1.15:8080";
 //    public static final String BASE_URL = "http://192.168.0.102:8080";
 //    public static final String BASE_URL = "http://192.168.0.105:8080";

@@ -3,7 +3,7 @@ package com.example.elvedin.sporedimk;
 import android.support.test.espresso.Espresso;
 import android.support.test.rule.ActivityTestRule;
 
-import com.example.elvedin.sporedimk.ui.activity.MainActivity;
+import com.example.elvedin.sporedimk.main.MainActivity;
 
 import org.junit.After;
 import org.junit.Before;

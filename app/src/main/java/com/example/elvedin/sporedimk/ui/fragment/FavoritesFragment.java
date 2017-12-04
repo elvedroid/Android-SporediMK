@@ -100,4 +100,14 @@ public class FavoritesFragment extends BaseFragment implements OfferAdapter.Offe
     protected boolean showBackButton() {
         return true;
     }
+
+    @Override
+    protected boolean showSearchView() {
+        return true;
+    }
+
+    @Override
+    protected boolean showMenuItems() {
+        return true;
+    }
 }

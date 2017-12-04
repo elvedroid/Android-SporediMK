@@ -60,14 +60,12 @@ public class UiHelper {
     }
 
     @SuppressLint("NewApi")
-    public static Bitmap BlurImage (Bitmap input, Context context)
-    {
-        try
-        {
+    public static Bitmap BlurImage(Bitmap input, Context context) {
+        try {
             RenderScript rsScript = RenderScript.create(context);
             Allocation alloc = Allocation.createFromBitmap(rsScript, input);
 
-            ScriptIntrinsicBlur blur = ScriptIntrinsicBlur.create(rsScript,   Element.U8_4(rsScript));
+            ScriptIntrinsicBlur blur = ScriptIntrinsicBlur.create(rsScript, Element.U8_4(rsScript));
             blur.setRadius(21);
             blur.setInput(alloc);
 
@@ -79,8 +77,7 @@ public class UiHelper {
 
             rsScript.destroy();
             return result;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             // TODO: handle exception
             return input;
         }
@@ -97,6 +94,7 @@ public class UiHelper {
             implements DatePickerDialog.OnDateSetListener {
 
         DatePicker datePicker;
+
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             // Use the current date as the default date in the picker
@@ -115,27 +113,27 @@ public class UiHelper {
         }
 
         public void setMinDate(Calendar calendar) {
-            DatePickerDialog datePickerDialog = (DatePickerDialog)this.getDialog();
+            DatePickerDialog datePickerDialog = (DatePickerDialog) this.getDialog();
             datePickerDialog.getDatePicker().setMinDate(calendar.getTimeInMillis());
         }
     }
 
     public static boolean validateEmpty(EditText editText) {
-        return editText.getText().toString().length()>0;
+        return editText.getText().toString().length() > 0;
     }
+
     public static boolean validateDecimalNumbers(EditText editText) {
-        if(editText.getText().toString().matches("\\d+(?:\\.\\d+)?")) {
+        if (editText.getText().toString().matches("\\d+(?:\\.\\d+)?")) {
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
+
     public static boolean validateIntegerNumbers(EditText editText) {
-        if(editText.getText().toString().matches("\\d+")) {
+        if (editText.getText().toString().matches("\\d+")) {
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -184,20 +182,21 @@ public class UiHelper {
         return keyHash;
     }
 
-    public static void addFragment(FragmentManager fm, int layout, Fragment fragment, boolean addToBackStack, int enterAnimation, int exitAnimation) {
+    public static void addFragment(FragmentManager fm, int layout, Fragment fragment, String tag , boolean addToBackStack, int enterAnimation, int exitAnimation) {
         FragmentTransaction ft = fm.beginTransaction();
-        if(enterAnimation != 0 || exitAnimation != 0){
+        if (enterAnimation != 0 || exitAnimation != 0) {
             ft.setCustomAnimations(enterAnimation, exitAnimation, enterAnimation, exitAnimation);
         }
-        ft.add(layout, fragment, fragment.getClass().getSimpleName());
+        ft.add(layout, fragment, tag);
         if (addToBackStack) {
-            ft.addToBackStack(fragment.getClass().getSimpleName());
+            ft.addToBackStack(tag);
         }
         ft.commit();
     }
+
     public static void replaceFragment(FragmentManager fm, int layout, Fragment fragment, boolean addToBackStack, int enterAnimation, int exitAnimation) {
         FragmentTransaction ft = fm.beginTransaction();
-        if(enterAnimation != 0 || exitAnimation != 0){
+        if (enterAnimation != 0 || exitAnimation != 0) {
             ft.setCustomAnimations(enterAnimation, exitAnimation, enterAnimation, exitAnimation);
         }
         ft.replace(layout, fragment, fragment.getClass().getSimpleName());
@@ -206,11 +205,23 @@ public class UiHelper {
         }
         ft.commit();
     }
-    public static void clearBackstack(FragmentManager fm) {
-        while (fm.getBackStackEntryCount() > 0) {
-            fm.popBackStackImmediate();
+
+    public static void replaceFragment(FragmentManager fm, int layout, Fragment fragment, String tag, boolean addToBackStack, int enterAnimation, int exitAnimation) {
+        FragmentTransaction ft = fm.beginTransaction();
+        if (enterAnimation != 0 || exitAnimation != 0) {
+            ft.setCustomAnimations(enterAnimation, exitAnimation, enterAnimation, exitAnimation);
         }
+        ft.replace(layout, fragment, tag);
+        if (addToBackStack) {
+            ft.addToBackStack(tag);
+        }
+        ft.commit();
     }
+
+    public static void clearBackstack(FragmentManager fm) {
+        fm.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+    }
+
     public static void popUpBackstack(FragmentManager fm) {
         fm.popBackStackImmediate();
     }

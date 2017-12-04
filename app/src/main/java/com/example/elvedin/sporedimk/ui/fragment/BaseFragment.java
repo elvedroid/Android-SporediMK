@@ -34,8 +34,10 @@ public abstract class BaseFragment extends Fragment {
 
         try {
             initViews(contentView);
-            ((BaseActivity)getActivity()).setTitle(getTitle());
             ((BaseActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(showBackButton());
+            ((BaseActivity)getActivity()).setShowSearchMenuItem(showSearchView());
+            ((BaseActivity)getActivity()).setShowMenuItemsChooseView(showMenuItems());
+            ((BaseActivity)getActivity()).setTitle(getTitle());
         } catch (Throwable e) {
             getActivity().finish();
             if(Filter.isDebuggingMode) {
@@ -49,5 +51,7 @@ public abstract class BaseFragment extends Fragment {
     protected abstract int getLayoutResId();
     protected abstract String getTitle();
     protected boolean showBackButton(){ return false; };
+    protected boolean showSearchView(){return false; }
+    protected boolean showMenuItems(){return false; }
     protected abstract void initViews(View contentView);
 }

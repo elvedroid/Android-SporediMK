@@ -1,15 +1,20 @@
 package com.example.elvedin.sporedimk.products.productdetails;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.example.elvedin.sporedimk.model.Favorites;
+import com.example.elvedin.sporedimk.model.Offer;
 import com.example.elvedin.sporedimk.model.Product;
 import com.example.elvedin.sporedimk.model.ProductOffers;
 import com.example.elvedin.sporedimk.scheduler.BaseSchedulerProvider;
+import com.example.elvedin.sporedimk.scheduler.SchedulerProvider;
 import com.example.elvedin.sporedimk.ui.manager.network_manager.ClientInterface;
+import com.example.elvedin.sporedimk.ui.manager.network_manager.RemoteRepository;
 
-import java.lang.ref.WeakReference;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableObserver;
@@ -21,20 +26,25 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * Created by elvedin on 11/29/17.
  */
 
-public class ProductDetailsPresenter implements ProductDetailsContract.UserActionsListener {
+public class ProductDetailsPresenter implements ProductDetailsContract.Presenter {
 
-    private final ClientInterface repository;
+    private final RemoteRepository repository;
 
+    @Nullable
     private final ProductDetailsContract.View view;
 
-    private final BaseSchedulerProvider schedulerProvider;
+    private  BaseSchedulerProvider schedulerProvider;
 
-    public ProductDetailsPresenter(@NonNull ClientInterface repository,
-                                   @NonNull ProductDetailsContract.View view,
-                                   @NonNull BaseSchedulerProvider schedulerProvider) {
+    @Nullable
+    private final Offer offer;
+
+    public ProductDetailsPresenter(Offer offer,
+                                   @NonNull RemoteRepository repository,
+                                   ProductDetailsContract.View view) {
+        this.offer = offer;
         this.repository = checkNotNull(repository, "repository cannot be null");
-        this.view = checkNotNull(view, "view cannot be null");
-        this.schedulerProvider = checkNotNull(schedulerProvider, "schedulerProvider cannot be null");
+        this.view = view;
+        this.schedulerProvider = new SchedulerProvider();
     }
 
     @Override
@@ -108,5 +118,15 @@ public class ProductDetailsPresenter implements ProductDetailsContract.UserActio
 
                     }
                 });
+    }
+
+    @Override
+    public <T> void takeView(T view) {
+
+    }
+
+    @Override
+    public void dropView() {
+
     }
 }
