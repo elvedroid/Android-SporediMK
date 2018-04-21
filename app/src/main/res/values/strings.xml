@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SporediMK</string>
+    <string name="app_name">My IT Marekt</string>
     <string name="title_home">Home</string>
     <string name="title_categories">Categories</string>
     <string name="title_favorites">Favorites</string>
@@ -28,4 +28,7 @@
     <string name="connection_error">Connection Error</string>
     <string name="search_result">Search Result</string>
     <string name="title_products">Products</string>
+
+    <string name="no_results">No Results</string>
+
 </resources>

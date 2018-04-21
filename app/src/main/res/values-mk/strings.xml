@@ -28,4 +28,7 @@
     <string name="connection_error">Грешка при конекцијата</string>
     <string name="search_result">Резултати од пребарувањето</string>
     <string name="title_products">Продукти</string>
+
+    <string name="no_results">Нема резултати од пребарувањето</string>
+
 </resources>
